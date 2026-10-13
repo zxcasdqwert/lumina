@@ -2,7 +2,8 @@
 (function(root){
 'use strict';
 const N=8, TYPES=6;
-function matches(b){const set=new Set();for(let r=0;r<N;r++)for(let c=0;c<N;c++){let i=r*N+c,t=b[i];if(t<0)continue;if(c<=5&&b[i+1]===t&&b[i+2]===t){let k=c;while(k<N&&b[r*N+k]===t)set.add(r*N+k++);}if(r<=5&&b[i+N]===t&&b[i+2*N]===t){let k=r;while(k<N&&b[k*N+c]===t)set.add(k++*N+c);}}return [...set];}
+function matchLines(b){const lines=[];for(const axis of ['h','v'])for(let outer=0;outer<N;outer++){let start=0;while(start<N){const index=k=>axis==='h'?outer*N+k:k*N+outer,type=b[index(start)];let end=start+1;while(end<N&&b[index(end)]===type)end++;if(type>=0&&end-start>=3)lines.push({axis,type,cells:Array.from({length:end-start},(_,k)=>index(start+k))});start=end;}}return lines;}
+function matches(b){return [...new Set(matchLines(b).flatMap(line=>line.cells))];}
 function adjacent(a,b){return Math.abs(a%N-b%N)+Math.abs(Math.floor(a/N)-Math.floor(b/N))===1;}
 function swap(b,a,c){[b[a],b[c]]=[b[c],b[a]];}
 function moves(b){const out=[];for(let i=0;i<64;i++)for(const j of [i%8<7?i+1:-1,i<56?i+8:-1]){if(j<0||b[i]===b[j])continue;swap(b,i,j);if(matches(b).length)out.push([i,j]);swap(b,i,j);}return out;}
@@ -13,17 +14,19 @@ function blast(i){let out=[];for(let dr=-1;dr<=1;dr++)for(let dc=-1;dc<=1;dc++){
 // Explicit campaign: points, requested pieces, mist, and combinations.
 const levels=[
 {moves:22,score:900},{moves:23,type:0,count:16},{moves:24,mist:12},
-{moves:24,type:2,count:16},{moves:25,score:2200},{moves:25,mist:18},
+{moves:24,type:2,count:16},{moves:25,score:2700},{moves:25,mist:18},
 {moves:25,type:1,count:18},{moves:26,type:3,count:17,mist:14},
-{moves:26,score:3000},{moves:26,mist:24},{moves:26,type:4,count:20},
-{moves:27,type:0,count:19,mist:20},{moves:27,score:3800},
+{moves:26,score:3800},{moves:26,mist:24},{moves:26,type:4,count:20},
+{moves:27,type:0,count:19,mist:20},{moves:27,score:4800},
 {moves:27,mist:30},{moves:27,type:5,count:22},
-{moves:28,type:2,count:21,mist:26},{moves:28,score:4500},
+{moves:28,type:2,count:21,mist:26},{moves:28,score:5700},
 {moves:28,type:1,count:22,mist:28},{moves:29,mist:38},
 {moves:30,score:4200,type:5,count:22,mist:30}];
 levels.forEach(l=>{if(l.mist)l.clear=Math.ceil(l.mist*.65);});
 function mistFor(n){let a=Array(64).fill(0);const order=Array.from({length:64},(_,i)=>(i*17+19)%64);order.slice(0,n).forEach(i=>a[i]=1);return a;}
 function complete(s,l){return (!l.score||s.score>=l.score)&&(!l.count||s.collected[l.type]>=l.count)&&(!l.mist||l.mist-s.mist.reduce((a,b)=>a+b,0)>=l.clear);}
-const Engine={N,TYPES,matches,adjacent,swap,moves,board,refill,shuffle,blast,levels,mistFor,complete};
+const Engine={N,TYPES,matchLines,matches,adjacent,swap,moves,board,refill,shuffle,blast,levels,mistFor,complete};
 if(typeof module!=='undefined')module.exports=Engine;else root.Engine=Engine;
 })(typeof window==='undefined'?globalThis:window);
+
+
