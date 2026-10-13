@@ -1,5 +1,17 @@
-# Lumina — City of Lanterns
+# Люмина — город фонарей
 
-A cozy match-three game about rebuilding a magical town. Open the game at the repository's GitHub Pages site after deployment.
+Казуальная игра «три в ряд» о восстановлении сказочного города.
 
-The playable HTML game and all local assets are included at the repository root. No build step or external game library is needed.
+## Играть
+
+После первого успешного запуска GitHub Actions откройте:
+
+https://zxcasdqwert.github.io/lumina/
+
+Дождитесь завершения workflow **Publish GitHub Pages** во вкладке Actions. Репозиторий и опубликованная игра открыты всем по ссылке.
+
+## Локальный запуск
+
+Откройте `index.html` в современном браузере. Игровые файлы находятся в корне, сборка и сторонние библиотеки не нужны. При запуске вне Яндекс Игр прогресс сохраняется локально, функции платформы недоступны.
+
+Подробности проверок — в `QA.md`; список исправлений — в `CHANGES.md`.
