@@ -1,0 +1,1 @@
+The GitHub Pages workflow runs on pushes to main. The public game URL is https://zxcasdqwert.github.io/lumina/. Check the Publish GitHub Pages workflow under Actions for deployment progress.
